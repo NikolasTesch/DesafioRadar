@@ -1,3 +1,6 @@
+[tool.poetry]
+package-mode = false
+
 [project]
 name = "desafioradar"
 version = "0.1.0"
@@ -11,6 +14,7 @@ dependencies = [
     "ydata-profiling (>=4.18.1,<5.0.0)",
     "setuptools (<70.0.0)",
     "unidecode (>=1.4.0,<2.0.0)",
+    "notebook (>=7.0.0,<8.0.0)",
 ]
 
 
