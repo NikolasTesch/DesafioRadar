@@ -22,8 +22,8 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
     print("2. Aplicando Tratamentos de Limpeza...")
 
     # 2.1 - Filtro de Pedidos Válidos (Regra de Negócio 4.1 do PRD)
-    # Considerar apenas 'delivered', 'shipped' e 'invoiced'
-    valid_status = ['delivered', 'shipped', 'invoiced']
+    # Considerar apenas 'delivered'
+    valid_status = ["delivered"]
     orders = orders[orders['order_status'].isin(valid_status)].copy()
 
     # 2.2 - Conversão de Datas (Datetime)
@@ -51,7 +51,11 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
 
     # Tempo de Entrega (Dias corridos)
     orders['tempo_entrega_dias'] = (orders['order_delivered_customer_date'] - orders['order_purchase_timestamp']).dt.days
-    
+    # Filtrar tempos de entrega válidos (maior que 0 e até 100 dias)
+    orders = orders[
+        (orders["tempo_entrega_dias"] > 0) & (orders["tempo_entrega_dias"] <= 100)
+    ].copy()
+
     # Atraso na Entrega (Booleano)
     orders['atraso_entrega'] = orders['order_delivered_customer_date'] > orders['order_estimated_delivery_date']
 
@@ -61,6 +65,16 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
     # 4.1 Join Traduções de Categoria
     products = products.merge(translators, on='product_category_name', how='left')
     products['product_category_name_english'] = products['product_category_name_english'].fillna('other')
+
+    # Remover colunas indesejadas de produtos
+    cols_to_drop = [
+        "product_name_lenght",
+        "product_weight_g",
+        "product_length_cm",
+        "product_height_cm",
+        "product_width_cm",
+    ]
+    products = products.drop(columns=cols_to_drop, errors="ignore")
 
     # 4.2 Super DataFrame (Base Fato = Orders)
     df_merged = orders.merge(customers, on='customer_id', how='left')
@@ -78,6 +92,14 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
 
     # Receita Líquida (Para detalhe de item a item)
     df_merged['receita_liquida'] = df_merged['price'] + df_merged['freight_value']
+
+    # 4.3 Tratamento de Outliers (Regras Fnanceiras)
+    print("Filtrando Outliers Financeiros...")
+    df_merged = df_merged[
+        (df_merged["price"].isna() | (df_merged["price"] <= 2000))
+        & (df_merged["freight_value"].isna() | (df_merged["freight_value"] <= 200))
+        & (df_merged["payment_value"].isna() | (df_merged["payment_value"] <= 8000))
+    ].copy()
 
     # 5. Salvando Super Dataset
     print(f"5. Exportando Dados Finais (Linhas: {len(df_merged)})...")
