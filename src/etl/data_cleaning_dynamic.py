@@ -1,3 +1,10 @@
+"""
+Observe que este arquivo difere do data_cleaning.py em relação ao tratamento de outliers;
+Essa abordagem é dinamica, ou seja, os limites de outliers são calculados dinamicamente.
+
+Para análises, considerar ambos os arquivos para uma análise mais completa.
+"""
+
 import pandas as pd
 import unidecode
 import argparse
@@ -11,7 +18,7 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
     Engenha features logísticas (SLA e atraso), higieniza localidades geográficas via unidecode 
     e opera uma desnormalização controlada focado no grão 'Item-Nível', fundindo tabelas satélites 
     após agregações isoladas para evitar duplicação 1:N de pagamentos e avaliações. 
-    Aplica cortes rígidos em outliers numéricos de negócios.
+    Aplica técnicas de ESTATÍSTICA ROBUSTA (IQR e Percentil Extremo) para filtrar transações anômalas (Outliers) dinamicamente, abandonando limites fixos.
 
     Args:
         raw_data_dir (str): Caminho raiz contendo as matrizes .csv originais.
@@ -49,8 +56,9 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
         orders[col] = pd.to_datetime(orders[col])
     orders['tempo_entrega_dias'] = (orders['order_delivered_customer_date'] - orders['order_purchase_timestamp']).dt.days
     orders['atraso_entrega'] = orders['order_delivered_customer_date'] > orders['order_estimated_delivery_date']
+    q_995 = orders["tempo_entrega_dias"].quantile(0.995)
     orders = orders[
-        (orders["tempo_entrega_dias"] > 0) & (orders["tempo_entrega_dias"] <= 100) 
+        (orders["tempo_entrega_dias"] > 0) & (orders["tempo_entrega_dias"] <= q_995) 
     ].copy()
     orders_cols_to_keep = ['order_id', 'customer_id', 'order_purchase_timestamp', 'order_delivered_customer_date', 'tempo_entrega_dias', 'atraso_entrega']
     orders = orders[orders_cols_to_keep]
@@ -94,10 +102,21 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
     
     print("Filtrando Outliers Financeiros...")
 
+    # Função O(N) para Cauda Longa Extrema (Q3 + 3 * IQR)
+    def calc_iqr_limit(df_col):
+        q1 = df_col.quantile(0.25)
+        q3 = df_col.quantile(0.75)
+        iqr = q3 - q1
+        return q3 + 3 * iqr
+
+    limit_p = calc_iqr_limit(df_merged["price"])
+    limit_f = calc_iqr_limit(df_merged["freight_value"])
+    limit_v = calc_iqr_limit(df_merged["payment_value"])
+
     df_merged = df_merged[
-        (df_merged["price"].isna() | (df_merged["price"] <= 2000))&
-        (df_merged["freight_value"].isna() | (df_merged["freight_value"] <= 200))&
-        (df_merged["payment_value"].isna() | (df_merged["payment_value"] <= 8000))
+        (df_merged["price"].isna() | (df_merged["price"] <= limit_p))&
+        (df_merged["freight_value"].isna() | (df_merged["freight_value"] <= limit_f))&
+        (df_merged["payment_value"].isna() | (df_merged["payment_value"] <= limit_v))
     ].copy()
 
     df_merged.dropna(axis=0, how='any', inplace=True)
@@ -112,7 +131,7 @@ def clean_and_merge_data(raw_data_dir: str, output_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script de Limpeza (ETL)")
     parser.add_argument("--raw", default="data/raw", help="Caminho para arquivos CSV brutos")
-    parser.add_argument("--out", default="data/processed/olist_super_dataset.csv", help="Caminho de saída")
+    parser.add_argument("--out", default="data/processed/olist_super_dataset_dynamic.csv", help="Caminho de saída")
     args = parser.parse_args()
 
     clean_and_merge_data(args.raw, args.out)
