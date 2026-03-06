@@ -13,7 +13,7 @@ coverage.xml
 .venv/
 venv/
 env/
-
+não enviar/
 # Jupyter
 .ipynb_checkpoints/
 
