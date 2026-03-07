@@ -11,53 +11,48 @@ from ydata_profiling import ProfileReport
 
 
 def run_data_exploration():
-    """
-    Orquestra a análise exploratória de dados (EDA) automática sobre os pipelines de ETL.
-    
-    Injeta um Gatekeeper (validação de I/O) para abortar a thread caso as tabelas-fato 
-    Estática e Dinâmica não tenham sido consolidadas. Omitido isso, instiga dois fluxos 
-    do YData Profiling para gerar sumários descritivos rigorosos e renderiza snapshots 
-    (HTML) permitindo auditoria das distribuições tratadas versus cruas.
+    """Orquestra a análise exploratória de dados (EDA) automática sobre os datasets processados.
+
+    Gera dois relatórios do YData Profiling (HTML) para permitir a auditoria
+    das distribuições e correlações entre o dataset bruto e o dataset limpo.
 
     Returns:
-        None (I/O em disco)
+        None: Os relatórios são salvos diretamente em disco.
     """
-    raw_data_path = "data/processed/olist_super_dataset.csv"
-    raw_data_path_dynamic = "data/processed/olist_super_dataset_dynamic.csv"
-    output_report_path = "data/processed/ydata_profiling.html"
-    output_report_path_dynamic = "data/processed/ydata_profiling_dynamic.html"
-    
-    for file_path in [raw_data_path, raw_data_path_dynamic]:
+    merged_data_path = "data/processed/olist_ALL_RAW_MERGED.csv"
+    cleaned_data_path = "data/processed/olist_cleaned_dataset.csv"
+
+    output_report_merged = "data/processed/profiling_merged_raw.html"
+    output_report_cleaned = "data/processed/profiling_cleaned_dataset.html"
+
+    for file_path in [merged_data_path, cleaned_data_path]:
         if not os.path.exists(file_path):
-            print(f"[ERRO ARQUITETURAL] Falha de Dependência: '{file_path}' não localizado.")
-            print("A esteira de exploração exige que a Limpeza de Dados tenha sido efetuada.")
-            print("Execute previamente os passos geradores:")
-            print(" 1 -> poetry run python src/etl/data_cleaning.py")
-            print(" 2 -> poetry run python src/etl/data_cleaning_dynamic.py")
+            print(f"[ERRO] Arquivo não localizado: '{file_path}'")
             sys.exit(1)
 
-    super_dataset = pd.read_csv(raw_data_path)
-    super_dataset_dynamic = pd.read_csv(raw_data_path_dynamic)
-    
-    start = time.perf_counter()
-    profile_report = ProfileReport(
-        super_dataset, 
-        title="Olist Super Dataset Profiling Report",
-        minimal=True # Para uma visualização mais completa, tem a opção de retirar esse parâmetro - Mas já aviso que demora bem...
-    )
-    profile_report.to_file(output_report_path)
-    end = time.perf_counter() - start
-    print(f"Tempo de execução: {end:.2f} segundos\nLocal: {output_report_path}")
+    print(f"Lendo {merged_data_path}...")
+    df_merged = pd.read_csv(merged_data_path)
 
+    # Perfil 1: Dados Brutos Unidos
+    print("\nGerando perfil para: Dados Brutos Unidos...")
     start = time.perf_counter()
-    profile_report_dynamic = ProfileReport(
-        super_dataset_dynamic, 
-        title="Olist Super Dataset Profiling Report Dynamic",
-        minimal=True # Para uma visualização mais completa, tem a opção de retirar esse parâmetro - Mas já aviso que demora bem...
+    ProfileReport(
+        df_merged, title="Olist Merged Raw Data Profiling", minimal=True
+    ).to_file(output_report_merged)
+    print(f"Concluído em: {time.perf_counter() - start:.2f}s -> {output_report_merged}")
+
+    print(f"\nLendo {cleaned_data_path}...")
+    df_cleaned = pd.read_csv(cleaned_data_path)
+
+    # Perfil 2: Dados Limpos e Tratados
+    print("\nGerando perfil para: Dados Limpos e Tratados...")
+    start = time.perf_counter()
+    ProfileReport(
+        df_cleaned, title="Olist Cleaned Dataset Profiling", minimal=True
+    ).to_file(output_report_cleaned)
+    print(
+        f"Concluído em: {time.perf_counter() - start:.2f}s -> {output_report_cleaned}"
     )
-    profile_report_dynamic.to_file(output_report_path_dynamic)
-    end = time.perf_counter() - start
-    print(f"Tempo de execução: {end:.2f} segundos\nLocal: {output_report_path_dynamic}")
 
 if __name__ == "__main__":
     run_data_exploration()
