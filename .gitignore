@@ -34,3 +34,4 @@ data/raw/workflow-demo.csv
 documentation/workflow-demo-report.md
 data/processed/*.html
 data/processed/*.csv
+notebooks/results
