@@ -126,23 +126,3 @@ if not df_sim.empty:
         )
         st.caption(f"Taxa de atraso atual: {delay_rate_actual*100:.2f}% | Pedidos salvos: {pedidos_salvos:,.0f}")
 
-st.markdown("---")
-st.markdown("### 👥 Equipe Desafio Radar")
-members = [
-    ("Davi", "Análise Estratégica e Sazonalidade", "📅"),
-    ("Edvan", "Regionalidade e Qualidade de Dados", "🌎"),
-    ("Nikolas", "Performance Logística", "🚚"),
-    ("Samuel", "Financeiro e Pagamentos", "💰"),
-    ("Gustavo", "Satisfação do Cliente", "⭐"),
-    ("Romulo / Fabily", "Insights de Mercado", "💡"),
-]
-cols = st.columns(3)
-for i, (name, role, icon) in enumerate(members):
-    with cols[i % 3]:
-        st.markdown(f"""
-        <div style="background:rgba(108,99,255,0.08); border:1px solid rgba(108,99,255,0.2); border-radius:10px; padding:0.8rem; margin-bottom:0.7rem; text-align:center;">
-            <div style="font-size:1.5rem;">{icon}</div>
-            <div style="font-family:'Poppins',sans-serif; font-weight:700; color:#d9d9d9; font-size:0.9rem;">{name}</div>
-            <div style="font-family:'DM Sans',sans-serif; color:#888; font-size:0.8rem; margin-top:0.2rem;">{role}</div>
-        </div>
-        """, unsafe_allow_html=True)

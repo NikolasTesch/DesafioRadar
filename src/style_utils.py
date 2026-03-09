@@ -15,7 +15,16 @@ def load_svg_base64(path: str) -> str:
     try:
         with open(path, 'rb') as f:
             return base64.b64encode(f.read()).decode()
-    except FileNotFoundError:
+    except Exception:
+        return ""
+
+
+def load_image_base64(path: str) -> str:
+    """Carrega uma imagem (png, jpg, etc) e retorna como base64."""
+    try:
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except Exception:
         return ""
 
 
