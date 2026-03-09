@@ -107,13 +107,21 @@ if not df.empty:
         line=dict(color='#ff5050', dash='dot', width=2),
         yaxis='y2'
     ))
+    # Filtrar xaxis/yaxis do PLOTLY_LAYOUT para evitar conflito com kwargs explícitos
+    _layout = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
     fig_log.update_layout(
-        **PLOTLY_LAYOUT,
+        **_layout,
         title="Prazo Médio vs Taxa de Atraso ao Longo do Tempo",
-        xaxis_title="Mês",
-        yaxis=dict(title="Dias Médios", gridcolor='rgba(108,99,255,0.15)'),
-        yaxis2=dict(title="Taxa de Atraso (%)", overlaying='y', side='right', showgrid=False),
-        hovermode='x unified'
+        xaxis=dict(
+            title="Mês",
+            gridcolor="rgba(108,99,255,0.15)",
+            zerolinecolor="rgba(108,99,255,0.2)",
+        ),
+        yaxis=dict(title="Dias Médios", gridcolor="rgba(108,99,255,0.15)"),
+        yaxis2=dict(
+            title="Taxa de Atraso (%)", overlaying="y", side="right", showgrid=False
+        ),
+        hovermode="x unified",
     )
     st.plotly_chart(fig_log, use_container_width=True)
 

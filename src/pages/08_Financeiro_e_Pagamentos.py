@@ -48,13 +48,23 @@ if not df.empty:
         name='Ticket Médio (R$)', mode='lines+markers',
         line=dict(color='#ffd93d', width=3), yaxis='y2'
     ))
+    _layout = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
     fig_dual.update_layout(
-        **PLOTLY_LAYOUT,
+        **_layout,
         title="Volume vs Ticket Médio por Número de Parcelas",
-        xaxis=dict(title="Parcelas", gridcolor='rgba(108,99,255,0.15)'),
-        yaxis=dict(title="Volume de Pedidos", side='left', gridcolor='rgba(108,99,255,0.15)'),
-        yaxis2=dict(title="Ticket Médio (R$)", side='right', overlaying='y', showgrid=False),
-        hovermode='x unified', barmode='overlay'
+        xaxis=dict(
+            title="Parcelas",
+            gridcolor="rgba(108,99,255,0.15)",
+            zerolinecolor="rgba(108,99,255,0.2)",
+        ),
+        yaxis=dict(
+            title="Volume de Pedidos", side="left", gridcolor="rgba(108,99,255,0.15)"
+        ),
+        yaxis2=dict(
+            title="Ticket Médio (R$)", side="right", overlaying="y", showgrid=False
+        ),
+        hovermode="x unified",
+        barmode="overlay",
     )
     st.plotly_chart(fig_dual, use_container_width=True)
 
@@ -107,7 +117,14 @@ if not df.empty:
             bgcolor='rgba(255,80,0,0.7)', font=dict(color='white', size=11),
             bordercolor='#ffd93d', borderwidth=1, borderpad=6
         )
-    fig_tl.update_layout(**PLOTLY_LAYOUT, title="Receita Líquida Mensal", xaxis_title="Período", yaxis_title="Receita (R$)", hovermode='x unified')
+    _layout_tl = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
+    fig_tl.update_layout(
+        **_layout_tl,
+        title="Receita Líquida Mensal",
+        xaxis_title="Período",
+        yaxis_title="Receita (R$)",
+        hovermode="x unified",
+    )
     st.plotly_chart(fig_tl, use_container_width=True)
 
     proposta_box("1. <strong>Campanhas de Parcelamento Sem Juros</strong> para categorias de alto valor (Eletrônicos, Relógios). 2. <strong>Incentivo ao Cartão de Crédito</strong> via cashback — hoje sub-representado vs boleto. 3. <strong>Estratégia de Q4</strong>: Black Friday + pré-Natal como janela principal de push de volume, com infraestrutura logística reforçada.")

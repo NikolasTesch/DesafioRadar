@@ -81,3 +81,60 @@ st.markdown("""
 > *Cada página deste dashboard segue a estrutura: **Problema → Evidência Visual → Insight → Proposta de Valor**.*
 > Isso garante que a análise não seja apenas descritiva, mas **prescritiva** — focada em ações reais de negócio.
 """)
+
+st.divider()
+
+st.markdown("### 👥 Nossa Equipe")
+st.markdown(
+    "<p style=\"font-family:'DM Sans',sans-serif; color:#888; font-size:0.9rem; margin-bottom:1.2rem;\">"
+    "Desenvolvido por estudantes da Turma 7 (NYX) da Alpha Edtech.</p>",
+    unsafe_allow_html=True,
+)
+
+members = [
+    (
+        "Davi Moura",
+        "Análise Estratégica & Sazonalidade",
+        "📅",
+        "https://github.com/davims9",
+    ),
+    ("Romulo Reis", "Insights de Mercado", "💡", "https://github.com/romulo.reis"),
+    ("Fabily", "Insights de Mercado", "💡", "https://github.com/Fabily-Ideale"),
+    (
+        "Edvan Sabino",
+        "Regionalidade & Qualidade de Dados",
+        "🌎",
+        "https://github.com/edvannps",
+    ),
+    ("Nikolas Tesch", "Performance Logística", "🚚", "https://github.com/NikolasTesch"),
+    ("Samuel Veronezi", "Financeiro & Pagamentos", "💰", "https://github.com/vicians"),
+    ("Luis Gustavo", "Satisfação do Cliente", "⭐", "https://github.com/vieiralg"),
+]
+
+cols = st.columns(4)
+for i, (name, role, icon, url) in enumerate(members):
+    with cols[i % 4]:
+        st.markdown(
+            f"""
+        <a href="{url}" target="_blank" style="text-decoration:none;">
+        <div style="
+            background: rgba(108,99,255,0.08);
+            border: 1px solid rgba(108,99,255,0.25);
+            border-radius: 14px;
+            padding: 1.1rem 0.8rem;
+            margin-bottom: 0.9rem;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        ">
+            <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">{icon}</div>
+            <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:0.88rem; color:#d9d9d9;">{name}</div>
+            <div style="font-family:'DM Sans',sans-serif; font-size:0.75rem; color:#888; margin-top:0.3rem;">{role}</div>
+            <div style="font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#6c63ff; margin-top:0.5rem;">
+                🔗 GitHub
+            </div>
+        </div>
+        </a>
+        """,
+            unsafe_allow_html=True,
+        )

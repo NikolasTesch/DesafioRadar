@@ -4,12 +4,12 @@ Este projeto é uma aplicação **Streamlit** desenvolvida para fornecer uma vis
 
 ---
 
-## 📋 Visão Geral
-O Dashboard consolida análises fundamentais para a gestão do e-commerce:
-*   **Logística**: Identificação de gargalos e impacto do tempo de entrega no NPS.
-*   **Financeiro**: Visualização de GMV, impacto do frete e ticket médio por região.
-*   **Regionalidade**: Mapeamento de fricções e performance por estado.
-*   **Sazonalidade**: Comportamento da operação em eventos críticos como a Black Friday.
+## 🚀 Funcionalidades do Dashboard
+- **Storytelling Orientado a Dados:** Navegação fluida desde a apresentação do problema até a proposta de soluções.
+- **Visão Logística:** Análise de tempos de entrega regionais e seus impactos.
+- **Análise Financeira:** Faturamento, ticket médio e comportamento de vendas.
+- **Métricas de Satisfação:** Correlação entre atrasos logísticos e o *Review Score* dos clientes.
+- **Propostas de Valor & Machine Learning:** Direcionamentos estratégicos e modelos preditivos para otimização do e-commerce.
 
 ---
 
@@ -55,13 +55,19 @@ streamlit run src/app.py
 
 ---
 
-## 📁 Estrutura do Projeto
-*   `data/`: Contém os datasets brutos (`raw/`) e processados.
-*   `src/app.py`: Ponto de entrada da aplicação Streamlit.
-*   `src/pages/`: Páginas detalhadas de análise (Logística, Regionalidade, etc).
-*   `src/utils.py`: Funções de processamento, ETL e cache de dados.
-*   `notebooks/`: Documentação da análise exploratória e experimentos de ML.
+## 📁 Estrutura do Repositório
 
+```text
+├── data/
+│   ├── raw/                 # Datasets originais da Olist (.csv)
+│   └── processed/           # olist_super_dataset.csv (Tabela analítica final)
+├── notebooks/               # Notebooks Jupyter com EDA e testes de hipóteses
+├── public/                  # Assets visuais (logos, favicons)
+├── src/                     # Scripts de ETL e processamento
+├── app.py                   # Arquivo principal do Streamlit
+├── pages/                   # Páginas da aplicação web
+└── README.md
+```
 ---
 
 ## 🛠️ Tecnologias Utilizadas

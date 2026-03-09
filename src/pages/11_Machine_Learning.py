@@ -114,7 +114,13 @@ categories = ['Impacto no NPS', 'Complexidade\nde Implementação', 'Dados\nDisp
                'Velocidade p/ Produção', 'ROI Estimado']
 
 fig_radar = go.Figure()
-colors_ml = ['#6c63ff', '#00c882', '#ffd93d', '#4ecdc4']
+# Cores de linha e preenchimento separados (fillcolor precisa de rgba válido)
+ml_colors = [
+    ("#6c63ff", "rgba(108,99,255,0.15)"),
+    ("#00c882", "rgba(0,200,130,0.15)"),
+    ("#ffd93d", "rgba(255,217,61,0.15)"),
+    ("#4ecdc4", "rgba(78,205,196,0.15)"),
+]
 projects = [
     ("Predição de Atraso", [90, 60, 95, 80, 88]),
     ("NPS Predictor", [85, 55, 90, 85, 82]),
@@ -122,15 +128,17 @@ projects = [
     ("Forecasting de Demanda", [70, 80, 75, 55, 72]),
 ]
 
-for (name, vals), color in zip(projects, colors_ml):
-    fig_radar.add_trace(go.Scatterpolar(
-        r=vals + [vals[0]],
-        theta=categories + [categories[0]],
-        fill='toself',
-        fillcolor=color.replace('#', 'rgba(') + ',0.1)' if color.startswith('#') else color,
-        line=dict(color=color, width=2),
-        name=name
-    ))
+for (name, vals), (line_color, fill_color) in zip(projects, ml_colors):
+    fig_radar.add_trace(
+        go.Scatterpolar(
+            r=vals + [vals[0]],
+            theta=categories + [categories[0]],
+            fill="toself",
+            fillcolor=fill_color,
+            line=dict(color=line_color, width=2),
+            name=name,
+        )
+    )
 
 fig_radar.update_layout(
     **PLOTLY_LAYOUT,
