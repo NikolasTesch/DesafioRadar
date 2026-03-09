@@ -14,12 +14,12 @@ col_a, col_b = st.columns([3, 2])
 
 with col_a:
     st.markdown("""
-    ### O que é o Desafio Radar?
-    O **Desafio Radar** é uma iniciativa de análise exploratória e estratégica conduzida para extrair
-    **inteligência de negócio** real do maior dataset público de e-commerce brasileiro.
+    ### O que é o projeto?
+    O projeto propõe uma análise profunda do dataset de e-commerce da Olist, com o objetivo de
+    **traduzir dados em insights estratégicos** e entender o real impacto de variáveis logísticas no negócio.
 
-    A missão da equipe foi clara: **transformar dados brutos em decisões de alto impacto**, respondendo
-    às perguntas que os gestores de um marketplace realmente precisam responder antes de investir.
+    A missão é clara: **compreender o comportamento dos dados** e extrair inteligência real para apoiar a tomada
+    de decisão em marketplaces de alta complexidade.
 
     ---
     ### 🏢 Sobre a Olist
@@ -32,23 +32,37 @@ with col_b:
     st.markdown(
         """
     <div style="
-        background: rgba(108,99,255,0.1);
-        border: 1px solid rgba(108,99,255,0.3);
-        border-radius: 14px;
-        padding: 1.5rem;
+        background: rgba(108,99,255,0.08);
+        border: 1px solid rgba(108,99,255,0.2);
+        border-radius: 16px;
+        padding: 1.8rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     ">
-        <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:1rem; margin-bottom:1rem; color:#d9d9d9;">
-            📊 Sobre o Dataset
+        <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:1.2rem; color:#a89bff; text-align:center;">
+            📊 Panorama do Dataset
         </div>
-        <ul style="font-family:'DM Sans',sans-serif; color:#ccc; line-height:2; list-style:none; padding:0;">
-            <li>🗓️ <strong>Período:</strong> 2016 – 2018</li>
-            <li>📦 <strong>Pedidos:</strong> ~100.000</li>
-            <li>🛍️ <strong>Produtos:</strong> ~33.000 SKUs</li>
-            <li>🧑 <strong>Clientes únicos:</strong> ~99.000</li>
-            <li>🏪 <strong>Vendedores:</strong> ~3.000</li>
-            <li>📍 <strong>Estados:</strong> 27 UFs</li>
-            <li>🗂️ <strong>Tabelas:</strong> 7 datasets integrados</li>
-        </ul>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: 700; color: #fff;">~100k</div>
+                <div style="font-size: 0.7rem; color: #888;">Pedidos</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: 700; color: #fff;">~99k</div>
+                <div style="font-size: 0.7rem; color: #888;">Clientes</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: 700; color: #fff;">~3k</div>
+                <div style="font-size: 0.7rem; color: #888;">Sellers</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: 700; color: #fff;">27</div>
+                <div style="font-size: 0.7rem; color: #888;">Estados</div>
+            </div>
+        </div>
+        <div style="margin-top: 1.2rem; font-size: 0.85rem; color: #ccc; text-align: center; font-family: 'DM Sans', sans-serif;">
+            🗓️ <strong>Período:</strong> 2016 – 2018<br>
+            📦 <strong>Produtos:</strong> ~33k SKUs
+        </div>
     </div>
     """,
         unsafe_allow_html=True,
@@ -84,7 +98,7 @@ for i, (icon, title, desc) in enumerate(questions):
             f"""
         <div style="border:1px solid rgba(108,99,255,0.2); border-radius:10px; padding:1rem; margin-bottom:0.8rem; background:rgba(108,99,255,0.05);">
             <div style="font-size:1.5rem;">{icon}</div>
-            <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:0.9rem; color:#a89bff;">{title}</div>
+            <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:1.1rem; color:#a89bff;">{title}</div>
             <div style="font-family:'DM Sans',sans-serif; font-size:0.85rem; color:#bbb; margin-top:0.3rem;">{desc}</div>
         </div>
         """,

@@ -1,4 +1,4 @@
-# 📊 Desafio Radar: Dashboard Estratégico Olist
+# 📊 O peso do atraso: Dashboard Estratégico Olist
 
 Este projeto é uma aplicação **Streamlit** desenvolvida para fornecer uma visualização 360º e análise profunda dos dados do ecossistema de e-commerce da **Olist**. O objetivo é transformar dados brutos em insights estratégicos sobre os principais pilares da operação.
 
