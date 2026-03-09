@@ -74,6 +74,16 @@ def get_analytical_df():
     df['dia_semana'] = df['order_purchase_timestamp'].dt.day_name()
     df['hora_compra'] = df['order_purchase_timestamp'].dt.hour
     
+    # Mapeamento de Regiões (IBGE)
+    region_map = {
+        'AM': 'Norte', 'RR': 'Norte', 'AP': 'Norte', 'PA': 'Norte', 'TO': 'Norte', 'RO': 'Norte', 'AC': 'Norte',
+        'MA': 'Nordeste', 'PI': 'Nordeste', 'CE': 'Nordeste', 'RN': 'Nordeste', 'PE': 'Nordeste', 'PB': 'Nordeste', 'SE': 'Nordeste', 'AL': 'Nordeste', 'BA': 'Nordeste',
+        'MT': 'Centro-Oeste', 'MS': 'Centro-Oeste', 'GO': 'Centro-Oeste', 'DF': 'Centro-Oeste',
+        'SP': 'Sudeste', 'RJ': 'Sudeste', 'ES': 'Sudeste', 'MG': 'Sudeste',
+        'PR': 'Sul', 'SC': 'Sul', 'RS': 'Sul'
+    }
+    df['customer_region'] = df['customer_state'].map(region_map)
+    
     # Financeiro (Conforme notebook Samuel)
     df['receita_liquida'] = df['price'] + df['freight_value']
     
