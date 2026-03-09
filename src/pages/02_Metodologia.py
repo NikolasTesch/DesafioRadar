@@ -1,13 +1,82 @@
 import streamlit as st
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from style_utils import inject_global_css, render_sidebar_logo, page_header
+from style_utils import (
+    inject_global_css,
+    render_sidebar_logo,
+    page_header,
+    load_image_base64,
+)
 
-st.set_page_config(page_title="Olist - O peso do Atraso", page_icon=os.path.join(os.path.dirname(__file__), "..", "public", "Radar.svg"), layout="wide")
+st.set_page_config(
+    page_title="Olist - O peso do Atraso",
+    page_icon=os.path.join(
+        os.path.dirname(__file__), "..", "..", "public", "Radar.svg"
+    ),
+    layout="wide",
+)
 inject_global_css()
 render_sidebar_logo()
 
 page_header("🔬 Metodologia", "Como a análise foi conduzida — da origem ao insight")
+
+st.markdown("### 👥 Nossa Equipe")
+st.markdown(
+    "<p style=\"font-family:'DM Sans',sans-serif; color:#888; font-size:0.9rem; margin-bottom:1.2rem;\">"
+    "Desenvolvido por estudantes da Turma 7 (NYX) da Alpha Edtech.</p>",
+    unsafe_allow_html=True,
+)
+
+# Mapping members to their local profiles and photos
+PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "public")
+
+members = [
+    ("Davi Moura", "davims9", "DAVI.png"),
+    ("Romulo Reis", "romulo.reis", "ROMULO.png"),
+    ("Fabily", "Fabily-Ideale", "FABILY.jpg"),
+    ("Edvan Sabino", "edvannps", "edvan.png"),
+    ("Nikolas Tesch", "NikolasTesch", "NIKOLAS.png"),
+    ("Samuel Veronezi", "vicians", "SAMUEL.jpg"),
+    ("Luis Gustavo", "vieiralg", "LUIS.png"),
+]
+
+cols = st.columns(4)
+for i, (name, handle, filename) in enumerate(members):
+    with cols[i % 4]:
+        github_url = f"https://github.com/{handle.lstrip('/')}"
+        photo_path = os.path.join(PUBLIC_DIR, filename)
+        photo_b64 = load_image_base64(photo_path)
+
+        # Determine image format (png/jpg)
+        ext = filename.split(".")[-1].lower()
+        mime = f"image/{'jpeg' if ext == 'jpg' else ext}"
+        img_src = f"data:{mime};base64,{photo_b64}" if photo_b64 else ""
+
+        st.markdown(
+            f"""
+        <a href="{github_url}" target="_blank" style="text-decoration:none;">
+        <div style="
+            background: rgba(108,99,255,0.08);
+            border: 1px solid rgba(108,99,255,0.25);
+            border-radius: 14px;
+            padding: 1.5rem 0.8rem;
+            margin-bottom: 0.9rem;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        ">
+            <img src="{img_src}" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(108,99,255,0.5); object-fit: cover; margin-bottom: 0.8rem;">
+            <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:0.88rem; color:#d9d9d9;">{name}</div>
+            <div style="font-family:'DM Sans',sans-serif; font-size:0.75rem; color:#888; margin-top:0.2rem;">@{handle.lstrip("/")}</div>
+            <div style="font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#6c63ff; margin-top:0.6rem;">
+                🔗 Perfil GitHub
+            </div>
+        </div>
+        </a>
+        """,
+            unsafe_allow_html=True,
+        )
+
 
 st.markdown("""
 ### Etapas do Pipeline Analítico
@@ -98,33 +167,11 @@ for s in steps:
 
 # ── TEAM ───────────────────────────────────────────────────────────────────
 st.markdown("---")
-st.markdown("### 👥 Nossa Equipe")
-st.markdown(
-    "<p style=\"font-family:'DM Sans',sans-serif; color:#888; font-size:0.9rem; margin-bottom:1.2rem;\">"
-    "Analisado e desenvolvido por especialistas em dados da Turma NYX - Alpha Edtech.</p>",
-    unsafe_allow_html=True,
-)
+st.markdown("""
+### ⚡ Princípio de Design das Análises
+> *Cada página deste dashboard segue a estrutura: **Problema → Evidência Visual → Insight → Proposta de Valor**.*
+> Isso garante que a análise não seja apenas descritiva, mas **prescritiva** — focada em ações reais de negócio.
+""")
 
-members = [
-    ("Davi Moura", "Análise Estratégica", "📅", "https://github.com/davims9"),
-    ("Romulo Reis", "Insights de Mercado", "💡", "https://github.com/romulo.reis"),
-    ("Fabily", "Insights de Mercado", "💡", "https://github.com/Fabily-Ideale"),
-    ("Edvan Sabino", "Regionalidade", "🌎", "https://github.com/edvannps"),
-    ("Nikolas Tesch", "Logística", "🚚", "https://github.com/NikolasTesch"),
-    ("Samuel Veronezi", "Financeiro", "💰", "https://github.com/vicians"),
-    ("Luis Gustavo", "Satisfação", "⭐", "https://github.com/vieiralg"),
-]
+st.divider()
 
-m_cols = st.columns(len(members))
-for i, (name, role, icon, url) in enumerate(members):
-    with m_cols[i]:
-        st.markdown(
-            f"""
-            <div style="text-align: center; background: rgba(108,99,255,0.05); border: 1px solid rgba(108,99,255,0.1); border-radius: 10px; padding: 10px;">
-                <div style="font-size: 1.5rem;">{icon}</div>
-                <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:0.75rem; color:#d9d9d9; margin-top:5px;">{name}</div>
-                <a href="{url}" target="_blank" style="text-decoration:none; font-size:0.65rem; color:#6c63ff;">Profile</a>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
