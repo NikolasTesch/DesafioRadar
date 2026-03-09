@@ -83,6 +83,26 @@ st.markdown("""
 A análise seguiu um processo estruturado em 5 fases, garantindo que cada conclusão fosse baseada em dados confiáveis.
 """)
 
+steimpacts = [
+    (
+        "📉",
+        "Churn & LTV",
+        "Clientes com atraso têm **30–50% menos probabilidade de recomprar**, destruindo o Lifetime Value.",
+        "#ff5050",
+    ),
+    (
+        "🔄",
+        "Logística Reversa",
+        "Atrasos elevam cancelamentos, gerando custos que frequentemente superam a margem do produto.",
+        "#ffd93d",
+    ),
+    (
+        "🗣️",
+        "Reputação",
+        "Detratores ativos aumentam o CAC futuro ao exigir mais investimento para limpar a imagem da marca.",
+        "#ff6b6b",
+    ),
+]
 steps = [
     ("1", "Coleta e Integração", "🗂️",
      "7 datasets CSV foram carregados e integrados via <strong>joins estruturais</strong> (inner/left merge com Pandas), criando uma visão única de 360° do pedido — do clique do cliente à avaliação pós-entrega.",
@@ -144,6 +164,8 @@ for s in steps:
     </div>
     """, unsafe_allow_html=True)
 
+
+# ── TEAM ───────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown("""
 ### ⚡ Princípio de Design das Análises

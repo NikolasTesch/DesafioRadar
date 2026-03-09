@@ -113,3 +113,11 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# Final impact summary
+st.markdown("---")
+st.markdown("### 🎯 Impacto deste Dashboard")
+col_res1, col_res2, col_res3 = st.columns(3)
+col_res1.metric("Análises Acionáveis", "10+", "Soluções reais")
+col_res2.metric("Datasets Integrados", "7", "Visão 360°")
+col_res3.metric("Foco do Business", "ROI & NPS", "Estratégia")
