@@ -10,16 +10,13 @@ st.set_page_config(page_title="Olist - Sazonalidade", page_icon=os.path.join(os.
 inject_global_css()
 render_sidebar_logo()
 
-page_header("📅 Capítulo 6: O Pulso Temporal", "Sazonalidade, picos de demanda e janelas de oportunidade")
+page_header("📅 Capítulo 5: O Pulso Temporal", "Sazonalidade, picos de demanda e janelas de oportunidade")
 
 # ── INTRO NARRATIVO ─────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="background: rgba(108,99,255,0.07); border-left: 4px solid #6c63ff; border-radius: 0 12px 12px 0; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; font-family: 'DM Sans', sans-serif; color: #ccc; font-size: 0.95rem; line-height: 1.8;">
     Terminamos a análise financeira com um paradoxo: o <strong style="color:#ffd93d;">maior mês de receita é novembro</strong> — Black Friday —
-    mas também é quando a logística mais falha e o NPS mais cai.<br><br>
-    Este capítulo fecha a narrativa mostrando os <strong style="color:#a89bff;">padrões temporais completos</strong>:
-    quando o cliente compra, em qual hora do dia, como o crescimento se distribui ao longo dos meses
-    e como a sazonalidade pode ser usada como <strong>alavanca estratégica</strong> de marketing e operações.
+    mas também é quando a logística mais falha e o NPS mais cai.
 </div>
 """, unsafe_allow_html=True)
 
@@ -32,11 +29,14 @@ if not df.empty:
     st.markdown("### 📈 Série Temporal de Faturamento")
     st.markdown("<span style='font-family:\"DM Sans\",sans-serif; color:#888; font-size:0.9rem;'>O crescimento é consistente ao longo do período — mas November/2017 revela a dependência da operação em picos sazonais.</span>", unsafe_allow_html=True)
 
+    # Para a série temporal, mantemos a evolução, mas adicionamos nota sobre a base de dados
     sales_trend = df.groupby('ano_mes').agg(
         receita=('receita_liquida', 'sum'),
         pedidos=('order_id', 'count'),
         atraso_rate=('flag_atraso', 'mean')
     ).reset_index().sort_values('ano_mes')
+    # Filtro solicitado: Outubro/2016 a Agosto/2018
+    sales_trend = sales_trend[(sales_trend['ano_mes'] >= '2016-10') & (sales_trend['ano_mes'] <= '2018-08')]
 
     _layout = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
     fig_timeline = go.Figure()
@@ -88,37 +88,48 @@ if not df.empty:
         day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         pt_days = {'Monday': 'Segunda', 'Tuesday': 'Terça', 'Wednesday': 'Quarta',
                    'Thursday': 'Quinta', 'Friday': 'Sexta', 'Saturday': 'Sábado', 'Sunday': 'Domingo'}
-        sales_day = df.groupby('dia_semana').agg(
+        # Normalizar por Ano/Dia para obter a MÉDIA por dia da semana
+        df['ano'] = df['order_purchase_timestamp'].dt.year
+        sales_day_per_year = df.groupby(['ano', 'dia_semana']).agg(
             receita=('receita_liquida', 'sum'),
             pedidos=('order_id', 'count')
+        ).reset_index()
+        
+        sales_day = sales_day_per_year.groupby('dia_semana').agg(
+            receita=('receita', 'mean'),
+            pedidos=('pedidos', 'mean')
         ).reindex(day_order).reset_index()
         sales_day['dia_semana'] = sales_day['dia_semana'].map(pt_days)
 
-        # Insight: dias úteis dominam — consumidor que compra durante o expediente
         fig_day = px.bar(
             sales_day, x='dia_semana', y='receita',
             color='receita', color_continuous_scale='Greens',
             text='pedidos',
-            hover_data={'pedidos': ':,', 'receita': ':,.0f'},
-            labels={'receita': 'Faturamento (R$)', 'dia_semana': 'Dia da Semana', 'pedidos': 'Pedidos'},
-            title="Faturamento por Dia da Semana"
+            hover_data={'pedidos': ':.0f', 'receita': ':,.0f'},
+            labels={'receita': 'Faturamento Médio (R$)', 'dia_semana': 'Dia da Semana', 'pedidos': 'Média de Pedidos'},
+            title="Faturamento Médio por Dia da Semana (2016-2018)"
         )
         fig_day.update_traces(texttemplate='%{text:,} pedidos', textposition='outside', textfont_size=9)
         fig_day.update_layout(**PLOTLY_LAYOUT)
         st.plotly_chart(fig_day, use_container_width=True)
 
     with col2:
-        sales_hour = df.groupby('hora_compra').agg(
+        # Normalizar por Ano/Hora para obter a MÉDIA por hora
+        sales_hour_per_year = df.groupby(['ano', 'hora_compra']).agg(
             pedidos=('order_id', 'count'),
             receita=('receita_liquida', 'sum')
         ).reset_index()
-        sales_hour.columns = ['Hora', 'Volume de Pedidos', 'Receita']
+        
+        sales_hour = sales_hour_per_year.groupby('hora_compra').agg(
+            pedidos=('pedidos', 'mean'),
+            receita=('receita', 'mean')
+        ).reset_index()
+        sales_hour.columns = ['Hora', 'Média de Pedidos', 'Receita Média']
 
-        # Insight: pico entre 10h-16h → window para push/ads
         fig_hour = px.area(
-            sales_hour, x='Hora', y='Volume de Pedidos',
-            title="Volume de Pedidos por Hora do Dia",
-            hover_data={'Receita': ':,.0f'},
+            sales_hour, x='Hora', y='Média de Pedidos',
+            title="Média de Pedidos por Hora do Dia (Perfil 2016-2018)",
+            hover_data={'Receita Média': ':,.0f'},
             color_discrete_sequence=['#6c63ff']
         )
         fig_hour.update_layout(**PLOTLY_LAYOUT)
@@ -153,10 +164,11 @@ if not df.empty:
     df_copy['dia_sem_pt'] = df_copy['dia_sem'].map(pt_days_all)
     df_copy['mes_nome'] = df_copy['mes'].map(pt_months_map)
 
-    heatmap_data = df_copy.groupby(['mes_nome', 'mes', 'dia_sem_pt'])['order_id'].count().reset_index()
-    heatmap_data.columns = ['Mês', 'mes_num', 'Dia', 'Pedidos']
+    heatmap_data_per_year = df_copy.groupby(['ano', 'mes_nome', 'mes', 'dia_sem_pt'])['order_id'].count().reset_index()
+    heatmap_data = heatmap_data_per_year.groupby(['mes_nome', 'mes', 'dia_sem_pt'])['order_id'].mean().reset_index()
+    heatmap_data.columns = ['Mês', 'mes_num', 'Dia', 'Pedidos Médios']
     heatmap_data = heatmap_data.sort_values('mes_num')
-    heatmap_pivot = heatmap_data.pivot(index='Dia', columns='Mês', values='Pedidos')
+    heatmap_pivot = heatmap_data.pivot(index='Dia', columns='Mês', values='Pedidos Médios')
     # Reordenar linhas de dias
     valid_days = [d for d in day_order_pt if d in heatmap_pivot.index]
     heatmap_pivot = heatmap_pivot.reindex(valid_days)
@@ -185,11 +197,19 @@ if not df.empty:
     month_order_en = {1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr', 5: 'Mai', 6: 'Jun',
                       7: 'Jul', 8: 'Ago', 9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez'}
     df_copy2['mes_nome'] = df_copy2['mes_nome'].map(month_order_en)
-    sales_month = df_copy2.groupby('mes_nome').agg(
+    # Agrupa por Ano e Mês para calcular a MÉDIA mensal entre os anos
+    sales_month_per_year = df_copy2.groupby(['ano', 'mes_nome']).agg(
         receita=('receita_liquida', 'sum'),
         pedidos=('order_id', 'count'),
         atraso_rate=('flag_atraso', 'mean')
     ).reset_index()
+    
+    sales_month = sales_month_per_year.groupby('mes_nome').agg(
+        receita=('receita', 'mean'),
+        pedidos=('pedidos', 'mean'),
+        atraso_rate=('atraso_rate', 'mean')
+    ).reset_index()
+    
     month_seq = list(month_order_en.values())
     sales_month = sales_month.set_index('mes_nome').reindex(month_seq).reset_index()
 
@@ -197,9 +217,9 @@ if not df.empty:
     fig_month = px.bar(
         sales_month, x='mes_nome', y='receita',
         text='pedidos',
-        hover_data={'pedidos': ':,', 'atraso_rate': ':.1%', 'receita': ':,.0f'},
-        labels={'receita': 'Faturamento (R$)', 'mes_nome': 'Mês', 'pedidos': 'Pedidos', 'atraso_rate': 'Taxa de Atraso'},
-        title="Sazonalidade Mensal Acumulada (Nov = Black Friday)"
+        hover_data={'pedidos': ':.0f', 'atraso_rate': ':.1%', 'receita': ':,.0f'},
+        labels={'receita': 'Faturamento Médio (R$)', 'mes_nome': 'Mês', 'pedidos': 'Média de Pedidos', 'atraso_rate': 'Taxa de Atraso'},
+        title="Sazonalidade Mensal: Média por Mês (2016-2018)"
     )
     fig_month.update_traces(marker_color=colors_bar, texttemplate='%{text:,}', textposition='outside', textfont_size=9)
     fig_month.update_layout(**PLOTLY_LAYOUT)
@@ -221,23 +241,5 @@ if not df.empty:
     <strong>2. Blindagem Logística Preventiva (Outubro = Preparação):</strong> Renegociar SLAs com transportadoras em outubro, expandir estoque em CDs regionais e contratar temporários antes do pico de novembro. Proteger o NPS no momento de maior volume.<br><br>
     <strong>3. Ciclo de Pré-Natal (Dezembro como Oportunidade):</strong> Os dados mostram queda em dezembro após o pico de novembro. Campanhas de pré-natal com frete diferenciado podem capturar o volume de presente que está sendo perdido para concorrentes.
     """)
-
-    # ── FECHAMENTO NARRATIVO ─────────────────────────────────────────────────
-    st.markdown("""
-    <div style="margin-top:2rem; padding: 1.5rem 2rem; background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,200,130,0.08)); border-radius: 16px; border: 1px solid rgba(108,99,255,0.3); font-family: 'DM Sans', sans-serif; color: #ccc; font-size: 0.95rem; line-height: 1.9;">
-        <div style="font-family:'Poppins',sans-serif; font-size:1.1rem; font-weight:700; color:#a89bff; margin-bottom:0.8rem;">
-            🏁 Fim da Análise — O Que Descobrimos?
-        </div>
-        Ao longo desta jornada, conectamos os pontos entre <strong style="color:#d9d9d9;">geography → logística → satisfação → financeiro → tempo</strong>:<br><br>
-        ① O Brasil continental cria <strong>dois e-commerces</strong> com custos radicalmente diferentes.<br>
-        ② O atraso na entrega é o <strong>maior destruidor de NPS</strong> — mais que o produto em si.<br>
-        ③ O vendedor é responsável por <strong>+40% do tempo de entrega</strong> antes da transportadora ser envolvida.<br>
-        ④ O frete é percebido pelo cliente como parte do produto — e destrói a avaliação quando é alto.<br>
-        ⑤ A Black Friday é o pico de receita <strong>e</strong> o pico de falha operacional — um paradoxo que pode ser resolvido.<br><br>
-        <strong style="color:#00c882;">A solução não é um único projeto, mas um conjunto de alavancas coordenadas em logística, produto e marketing.</strong>
-        Veja as propostas no próximo capítulo.
-    </div>
-    """, unsafe_allow_html=True)
-
 else:
     st.warning("Dados não carregados.")
