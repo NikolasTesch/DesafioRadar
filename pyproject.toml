@@ -1,0 +1,35 @@
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "desafioradar"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "setuptools (<70.0.0)",
+    "unidecode (>=1.4.0,<2.0.0)",
+    "notebook (>=7.0.0,<8.0.0)",
+    "plotly (>=6.6.0,<7.0.0)",
+    "scikit-learn (>=1.8.0,<2.0.0)",
+    "statsmodels (>=0.14.6,<0.15.0)",
+    "streamlit (>=1.55.0,<2.0.0)",
+    "pandas (>=2.2.0,<3.0.0)",
+    "numpy (>=2.1.0,<3.0.0)",
+    "matplotlib (>=3.8.0,<4.0.0)",
+    "seaborn (>=0.13.0,<0.14.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "ydata-profiling (>=4.18.1,<5.0.0)",
+    "jupytext (>=1.19.1,<2.0.0)"
+]
