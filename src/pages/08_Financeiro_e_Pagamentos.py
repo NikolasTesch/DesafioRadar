@@ -10,13 +10,11 @@ st.set_page_config(page_title="Olist - Financeiro", page_icon=os.path.join(os.pa
 inject_global_css()
 render_sidebar_logo()
 
-page_header("💰 Capítulo 5: O Custo Real do Problema", "GMV, ticket médio e o impacto financeiro dos gargalos")
+page_header("💰 Capítulo 4: O Custo Real do Problema", "GMV, ticket médio e o impacto financeiro dos gargalos")
 
 # ── INTRO NARRATIVO ─────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="background: rgba(108,99,255,0.07); border-left: 4px solid #6c63ff; border-radius: 0 12px 12px 0; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; font-family: 'DM Sans', sans-serif; color: #ccc; font-size: 0.95rem; line-height: 1.8;">
-    Até aqui, vimos os <strong style="color:#a89bff;">problemas de experiência</strong>: atrasos, insatisfação, regiões prejudicadas.
-    Agora traduzimos isso em <strong style="color:#ffd93d;">linguagem de negócio: reais e centavos.</strong><br><br>
     Um cliente detrator custa mais para reativar do que um cliente promotor vale em compras repetidas.
     E enquanto a plataforma não incentiva o parcelamento em categorias de alto valor,
     está deixando um <strong>uplift de 20-25% no ticket médio</strong> na mesa — sem aquisição de nenhum novo cliente.
@@ -51,7 +49,7 @@ if not df.empty:
         ticket_medio=('receita_liquida', 'mean'),
         frete_medio=('freight_value', 'mean')
     ).reset_index()
-    installments_analysis = installments_analysis[installments_analysis['payment_installments'] <= 12]
+    installments_analysis = installments_analysis[(installments_analysis['payment_installments'] >= 1) & (installments_analysis['payment_installments'] <= 12)]
 
     _layout = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
     fig_dual = go.Figure()
@@ -121,7 +119,7 @@ if not df.empty:
         cat_rev.columns = ['Categoria', 'Receita Total', 'Pedidos', 'Ticket Médio']
         fig_cat = px.bar(
             cat_rev, x='Receita Total', y='Categoria', orientation='h',
-            color='Ticket Médio', color_continuous_scale='Viridis',
+            color='Ticket Médio', color_continuous_scale='RdYlGn',
             hover_data={'Pedidos': ':,', 'Ticket Médio': ':.2f', 'Receita Total': ':,.0f'},
             title="Categorias por GMV (cor = ticket médio)"
         )
@@ -154,60 +152,11 @@ if not df.empty:
 
     st.markdown("---")
 
-    # ── GRÁFICO 5: SÉRIE TEMPORAL COM BLACK FRIDAY ────────────────────────────
-    st.markdown("### Evolução da Receita com Destaque para Black Friday")
-    st.markdown("<span style='font-family:\"DM Sans\",sans-serif; color:#888; font-size:0.9rem;'>A receita cresce mês a mês, mas eventos pontuais criam picos que sobrecarregam toda a cadeia logística.</span>", unsafe_allow_html=True)
-
-    timeline = df_clean.groupby('ano_mes').agg(
-        receita=('receita_liquida', 'sum'),
-        pedidos=('order_id', 'nunique'),
-        ticket=('receita_liquida', 'mean')
-    ).reset_index().sort_values('ano_mes')
-
-    _layout_tl = {k: v for k, v in PLOTLY_LAYOUT.items() if k not in ("xaxis", "yaxis")}
-    fig_tl = go.Figure()
-    fig_tl.add_trace(go.Scatter(
-        x=timeline['ano_mes'], y=timeline['receita'],
-        mode='lines+markers', name='Receita Mensal',
-        line=dict(color='#6c63ff', width=3),
-        fill='tozeroy', fillcolor='rgba(108,99,255,0.15)',
-        hovertemplate='<b>%{x}</b><br>Receita: R$ %{y:,.0f}<br><extra></extra>'
-    ))
-    bf = timeline[timeline['ano_mes'] == '2017-11']
-    if not bf.empty:
-        fig_tl.add_annotation(
-            x='2017-11', y=bf['receita'].values[0],
-            text="🖤 Black Friday 2017<br>Pico Histórico de GMV",
-            showarrow=True, arrowhead=2, arrowcolor='#ffd93d',
-            bgcolor='rgba(255,80,0,0.8)', font=dict(color='white', size=11),
-            bordercolor='#ffd93d', borderwidth=1, borderpad=6
-        )
-    fig_tl.update_layout(
-        **_layout_tl,
-        title="Receita Líquida Mensal",
-        xaxis=dict(title="Período", gridcolor="rgba(108,99,255,0.15)"),
-        yaxis=dict(title="Receita (R$)", gridcolor="rgba(108,99,255,0.15)"),
-        hovermode="x unified",
-    )
-    st.plotly_chart(fig_tl, use_container_width=True)
-
-    st.markdown("---")
-
     proposta_box("""
     <strong>1. Campanhas de Parcelamento Sem Juros:</strong> Para categorias de alto valor (Eletrônicos, Relógios), subsídio de juros via taxa de seller. O uplift de 3x no ticket cobre facilmente o custo.<br><br>
     <strong>2. Incentivo ao Cartão de Crédito via Cashback:</strong> Boleto é o meio dominante, mas não favorece parcelamento. Programas de cashback em cartão crédito direcionam para parcelamentos maiores.<br><br>
     <strong>3. Estratégia de Q4 (Blindagem Logística + Push de GMV):</strong> Black Friday + pré-Natal com infraestrutura logística reforçada desde outubro, garantindo NPS positivo no pico de receita.
     """)
-
-    # ── BRIDGE NARRATIVO ─────────────────────────────────────────────────────
-    st.markdown("""
-    <div style="margin-top:2rem; padding: 1.2rem 1.5rem; background: rgba(108,99,255,0.06); border-radius: 12px; border: 1px solid rgba(108,99,255,0.2); font-family: 'DM Sans', sans-serif; color: #aaa; font-size: 0.9rem; line-height: 1.7;">
-        🔜 <strong style="color:#a89bff;">Próximo Capítulo: Sazonalidade</strong><br>
-        Vimos que a Black Friday é o pico de receita e também o pico de pressão logística.
-        O próximo capítulo detalha os padrões temporais completos — quando o cliente compra,
-        em que horário e como isso pode ser usado para otimizar campanhas e operações.
-    </div>
-    """, unsafe_allow_html=True)
 
 else:
     st.warning("Dados não carregados.")
