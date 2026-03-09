@@ -44,29 +44,29 @@ col_txt, col_viz = st.columns([1, 1], gap="large")
 
 with col_txt:
     st.markdown(textwrap.dedent("""
-        <div style="background:rgba(13,12,104,0.5);border:1px solid rgba(108,99,255,0.25);
-                    border-radius:16px;padding:1.5rem 1.8rem;">
-            <p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.92rem;line-height:1.9;margin:0;">
-                Machine Learning é ensinar o computador a <strong style="color:#a89bff;">aprender padrões
-                com dados históricos</strong> para tomar decisões ou fazer previsões em casos novos —
-                sem programar cada regra manualmente.
-            </p>
-            <p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.92rem;line-height:1.9;margin-top:1rem;">
-                No contexto da Olist, temos <strong style="color:#d9d9d9;">100.000 pedidos reais</strong>
-                com histórico completo de prazos, fretes, regiões e avaliações. Esse volume é exatamente
-                o que um modelo de ML precisa para aprender — e o que um analista humano jamais conseguiria
-                processar manualmente.
-            </p>
-            <div style="margin-top:1.2rem;padding:0.8rem 1rem;background:rgba(108,99,255,0.1);
-                        border-left:3px solid #6c63ff;border-radius:0 8px 8px 0;">
-                <p style="font-family:'DM Sans',sans-serif;color:#a89bff;font-size:0.88rem;margin:0;">
-                    <strong>Analogia:</strong> é como um funcionário experiente que já viu 100 mil pedidos
-                    e consegue dizer <em>"esse aqui tem tudo para atrasar"</em> — porque reconhece o padrão.
-                    O modelo faz o mesmo, em milissegundos.
-                </p>
-            </div>
-        </div>
-        """), unsafe_allow_html=True)
+<div style="background:rgba(13,12,104,0.5);border:1px solid rgba(108,99,255,0.25);
+border-radius:16px;padding:1.5rem 1.8rem;">
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.92rem;line-height:1.9;margin:0;">
+Machine Learning é ensinar o computador a <strong style="color:#a89bff;">aprender padrões
+com dados históricos</strong> para tomar decisões ou fazer previsões em casos novos —
+sem programar cada regra manualmente.
+</p>
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.92rem;line-height:1.9;margin-top:1rem;">
+No contexto da Olist, temos <strong style="color:#d9d9d9;">100.000 pedidos reais</strong>
+com histórico completo de prazos, fretes, regiões e avaliações. Esse volume é exatamente
+o que um modelo de ML precisa para aprender — e o que um analista humano jamais conseguiria
+processar manualmente.
+</p>
+<div style="margin-top:1.2rem;padding:0.8rem 1rem;background:rgba(108,99,255,0.1);
+border-left:3px solid #6c63ff;border-radius:0 8px 8px 0;">
+<p style="font-family:'DM Sans',sans-serif;color:#a89bff;font-size:0.88rem;margin:0;">
+<strong>Analogia:</strong> é como um funcionário experiente que já viu 100 mil pedidos
+e consegue dizer <em>"esse aqui tem tudo para atrasar"</em> — porque reconhece o padrão.
+O modelo faz o mesmo, em milissegundos.
+</p>
+</div>
+</div>
+"""), unsafe_allow_html=True)
 
 with col_viz:
     # Pipeline visual
@@ -96,101 +96,101 @@ col_m1, col_m2 = st.columns(2, gap="large")
 with col_m1:
     st.markdown(textwrap.dedent("""
 <div style="background:rgba(13,12,104,0.5);border:1px solid rgba(108,99,255,0.4);
-            border-radius:16px;padding:1.5rem 1.8rem;height:100%;">
-    <div style="font-size:2.2rem;margin-bottom:0.4rem;">📈</div>
-    <div style="font-family:'Poppins',sans-serif;font-weight:700;color:#a89bff;
-                font-size:1.05rem;margin-bottom:0.4rem;">
-        Modelo 1 — Regressão Linear
-    </div>
-    <div style="background:#6c63ff22;border:1px solid #6c63ff66;border-radius:20px;
-                padding:0.15rem 0.8rem;font-size:0.72rem;font-family:'DM Sans',sans-serif;
-                font-weight:700;color:#a89bff;display:inline-block;margin-bottom:1rem;">
-        Pergunta: QUANTOS DIAS vai levar?
-    </div>
+border-radius:16px;padding:1.5rem 1.8rem;height:100%;">
+<div style="font-size:2.2rem;margin-bottom:0.4rem;">📈</div>
+<div style="font-family:'Poppins',sans-serif;font-weight:700;color:#a89bff;
+font-size:1.05rem;margin-bottom:0.4rem;">
+Modelo 1 — Regressão Linear
+</div>
+<div style="background:#6c63ff22;border:1px solid #6c63ff66;border-radius:20px;
+padding:0.15rem 0.8rem;font-size:0.72rem;font-family:'DM Sans',sans-serif;
+font-weight:700;color:#a89bff;display:inline-block;margin-bottom:1rem;">
+Pergunta: QUANTOS DIAS vai levar?
+</div>
 
-    ("<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
-        <strong style="color:#d9d9d9;">Problema:</strong> a Olist hoje promete uma janela genérica
-        de entrega (ex: "7 a 15 dias"). Essa imprecisão é o principal gatilho de avaliações ruins —
-        o cliente se frustra não pelo atraso em si, mas pela expectativa errada.
-    </p>
-    <p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
-        <strong style="color:#d9d9d9;">Solução:</strong> com base em origem, destino, valor do frete
-        (proxy de peso/volume) e época do ano, o modelo calcula um prazo
-        <strong>individualizado e preciso</strong> para cada pedido.
-    </p>
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
+<strong style="color:#d9d9d9;">Problema:</strong> a Olist hoje promete uma janela genérica
+de entrega (ex: "7 a 15 dias"). Essa imprecisão é o principal gatilho de avaliações ruins —
+o cliente se frustra não pelo atraso em si, mas pela expectativa errada.
+</p>
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
+<strong style="color:#d9d9d9;">Solução:</strong> com base em origem, destino, valor do frete
+(proxy de peso/volume) e época do ano, o modelo calcula um prazo
+<strong>individualizado e preciso</strong> para cada pedido.
+</p>
 
-    <div style="margin-top:1rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#888;">
-        <div>🎯 <strong style="color:#d9d9d9;">Target:</strong>
-            <code style="color:#a89bff;">tempo_entrega_real</code> (número de dias)</div>
-        <div style="margin-top:0.4rem;">🔧 <strong style="color:#d9d9d9;">Features principais:</strong><br>
-            <code style="color:#ffd93d;font-size:0.78rem;">
-            customer_state, seller_state, freight_value,<br>
-            rota_interestadual, mes_compra, fim_de_semana
-            </code>
-        </div>
-        <div style="margin-top:0.4rem;">📐 <strong style="color:#d9d9d9;">Métrica:</strong>
-            <code style="color:#00c882;">MAE em dias — "erra em média X dias"</code></div>
-    </div>
+<div style="margin-top:1rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#888;">
+<div>🎯 <strong style="color:#d9d9d9;">Target:</strong>
+<code style="color:#a89bff;">tempo_entrega_real</code> (número de dias)</div>
+<div style="margin-top:0.4rem;">🔧 <strong style="color:#d9d9d9;">Features principais:</strong><br>
+<code style="color:#ffd93d;font-size:0.78rem;">
+customer_state, seller_state, freight_value,<br>
+rota_interestadual, mes_compra, fim_de_semana
+</code>
+</div>
+<div style="margin-top:0.4rem;">📐 <strong style="color:#d9d9d9;">Métrica:</strong>
+<code style="color:#00c882;">MAE em dias — "erra em média X dias"</code></div>
+</div>
 
-    <div style="margin-top:1rem;padding:0.7rem 1rem;background:rgba(108,99,255,0.1);
-                border-left:3px solid #6c63ff;border-radius:0 8px 8px 0;">
-        <p style="font-family:'DM Sans',sans-serif;color:#a89bff;font-size:0.85rem;margin:0;">
-            <strong>Por que Regressão Linear?</strong> Os coeficientes são diretamente
-            interpretáveis como insight de negócio: <em>"rota interestadual adiciona X dias ao prazo"</em>.
-            Simples, rápida e explicável para qualquer stakeholder.
-        </p>")
-    </div>
+<div style="margin-top:1rem;padding:0.7rem 1rem;background:rgba(108,99,255,0.1);
+border-left:3px solid #6c63ff;border-radius:0 8px 8px 0;">
+<p style="font-family:'DM Sans',sans-serif;color:#a89bff;font-size:0.85rem;margin:0;">
+<strong>Por que Regressão Linear?</strong> Os coeficientes são diretamente
+interpretáveis como insight de negócio: <em>"rota interestadual adiciona X dias ao prazo"</em>.
+Simples, rápida e explicável para qualquer stakeholder.
+</p>
+</div>
 </div>
 """), unsafe_allow_html=True)
 
 with col_m2:
     st.markdown(textwrap.dedent("""
 <div style="background:rgba(13,12,104,0.5);border:1px solid rgba(0,200,130,0.4);
-            border-radius:16px;padding:1.5rem 1.8rem;height:100%;">
-    <div style="font-size:2.2rem;margin-bottom:0.4rem;">🚀</div>
-    <div style="font-family:'Poppins',sans-serif;font-weight:700;color:#00c882;
-                font-size:1.05rem;margin-bottom:0.4rem;">
-        Modelo 2 — Classificação de Categorias
-    </div>
-    <div style="background:#00c88222;border:1px solid #00c88266;border-radius:20px;
-                padding:0.15rem 0.8rem;font-size:0.72rem;font-family:'DM Sans',sans-serif;
-                font-weight:700;color:#00c882;display:inline-block;margin-bottom:1rem;">
-        Pergunta: essa categoria vai dar BOOM?
-    </div>
+border-radius:16px;padding:1.5rem 1.8rem;height:100%;">
+<div style="font-size:2.2rem;margin-bottom:0.4rem;">🚀</div>
+<div style="font-family:'Poppins',sans-serif;font-weight:700;color:#00c882;
+font-size:1.05rem;margin-bottom:0.4rem;">
+Modelo 2 — Classificação de Categorias
+</div>
+<div style="background:#00c88222;border:1px solid #00c88266;border-radius:20px;
+padding:0.15rem 0.8rem;font-size:0.72rem;font-family:'DM Sans',sans-serif;
+font-weight:700;color:#00c882;display:inline-block;margin-bottom:1rem;">
+Pergunta: essa categoria vai dar BOOM?
+</div>
 
-    <p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
-        <strong style="color:#d9d9d9;">Problema:</strong> a Olist não sabe com antecedência
-        quais categorias vão explodir em demanda. Isso gera estoque insuficiente nas categorias
-        em crescimento e oportunidades perdidas de marketing e logística antecipada.
-    </p>
-    <p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
-        <strong style="color:#d9d9d9;">Solução:</strong> o modelo analisa o histórico de volume
-        de cada categoria e <strong>classifica as que têm perfil de crescimento acelerado</strong>
-        — permitindo ação antes que a demanda chegue.
-    </p>
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
+<strong style="color:#d9d9d9;">Problema:</strong> a Olist não sabe com antecedência
+quais categorias vão explodir em demanda. Isso gera estoque insuficiente nas categorias
+em crescimento e oportunidades perdidas de marketing e logística antecipada.
+</p>
+<p style="font-family:'DM Sans',sans-serif;color:#bbb;font-size:0.9rem;line-height:1.8;">
+<strong style="color:#d9d9d9;">Solução:</strong> o modelo analisa o histórico de volume
+de cada categoria e <strong>classifica as que têm perfil de crescimento acelerado</strong>
+— permitindo ação antes que a demanda chegue.
+</p>
 
-    <div style="margin-top:1rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#888;">
-        <div>🎯 <strong style="color:#d9d9d9;">Target:</strong>
-            <code style="color:#00c882;">boom = 1</code> (top 25% crescimento) ou
-            <code style="color:#ff6b6b;">boom = 0</code> (estável/declínio)</div>
-        <div style="margin-top:0.4rem;">🔧 <strong style="color:#d9d9d9;">Features principais:</strong><br>
-            <code style="color:#ffd93d;font-size:0.78rem;">
-            volume_total, crescimento_pct,<br>
-            volume por ano (série histórica)
-            </code>
-        </div>
-        <div style="margin-top:0.4rem;">📐 <strong style="color:#d9d9d9;">Métrica:</strong>
-            <code style="color:#00c882;">F1-Score + AUC-ROC</code></div>
-    </div>
+<div style="margin-top:1rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#888;">
+<div>🎯 <strong style="color:#d9d9d9;">Target:</strong>
+<code style="color:#00c882;">boom = 1</code> (top 25% crescimento) ou
+<code style="color:#ff6b6b;">boom = 0</code> (estável/declínio)</div>
+<div style="margin-top:0.4rem;">🔧 <strong style="color:#d9d9d9;">Features principais:</strong><br>
+<code style="color:#ffd93d;font-size:0.78rem;">
+volume_total, crescimento_pct,<br>
+volume por ano (série histórica)
+</code>
+</div>
+<div style="margin-top:0.4rem;">📐 <strong style="color:#d9d9d9;">Métrica:</strong>
+<code style="color:#00c882;">F1-Score + AUC-ROC</code></div>
+</div>
 
-    <div style="margin-top:1rem;padding:0.7rem 1rem;background:rgba(0,200,130,0.08);
-                border-left:3px solid #00c882;border-radius:0 8px 8px 0;">
-        <p style="font-family:'DM Sans',sans-serif;color:#00c882;font-size:0.85rem;margin:0;">
-            <strong>Por que Classificação e não Regressão?</strong> A decisão de negócio
-            é binária: <em>investir ou não nessa categoria?</em> Um número de crescimento esperado
-            é menos acionável do que uma sinalização clara de risco/oportunidade.
-        </p>
-    </div>
+<div style="margin-top:1rem;padding:0.7rem 1rem;background:rgba(0,200,130,0.08);
+border-left:3px solid #00c882;border-radius:0 8px 8px 0;">
+<p style="font-family:'DM Sans',sans-serif;color:#00c882;font-size:0.85rem;margin:0;">
+<strong>Por que Classificação e não Regressão?</strong> A decisão de negócio
+é binária: <em>investir ou não nessa categoria?</em> Um número de crescimento esperado
+é menos acionável do que uma sinalização clara de risco/oportunidade.
+</p>
+</div>
 </div>
 """), unsafe_allow_html=True)
 
@@ -299,7 +299,7 @@ with tab2:
         )
         st.plotly_chart(fig_mat, use_container_width=True)
 
-    insight_box(""" O classificador aprende a distinguir quais padrões de crescimento histórico indicam uma categoria em aceleração. Na matriz de confusão, o erro mais caro é o <strong>"Oportunidade Perdida"</strong> (categoria que vai explodir mas o modelo classificou como estável) — por isso a métrica F1-Score prioriza Recall.""")
+    insight_box("O classificador aprende a distinguir quais padrões de crescimento histórico indicam uma categoria em aceleração. Na matriz de confusão, o erro mais caro é o <strong>\"Oportunidade Perdida\"</strong> (categoria que vai explodir mas o modelo classificou como estável) — por isso a métrica F1-Score prioriza Recall.")
 
 st.markdown("---")
 
