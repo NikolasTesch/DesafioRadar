@@ -234,12 +234,5 @@ if not df.empty:
         )
     st.plotly_chart(fig_month, use_container_width=True)
 
-    st.markdown("---")
-
-    proposta_box("""
-    <strong>1. Dayparting Algorítmico (Prime-Time Marketing):</strong> Alocar 75% do budget de Ads na janela de 10h-16h, dias úteis. Redução imediata do CPC e aumento do ROAS sem mudar o investimento total.<br><br>
-    <strong>2. Blindagem Logística Preventiva (Outubro = Preparação):</strong> Renegociar SLAs com transportadoras em outubro, expandir estoque em CDs regionais e contratar temporários antes do pico de novembro. Proteger o NPS no momento de maior volume.<br><br>
-    <strong>3. Ciclo de Pré-Natal (Dezembro como Oportunidade):</strong> Os dados mostram queda em dezembro após o pico de novembro. Campanhas de pré-natal com frete diferenciado podem capturar o volume de presente que está sendo perdido para concorrentes.
-    """)
 else:
     st.warning("Dados não carregados.")

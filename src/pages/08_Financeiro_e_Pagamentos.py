@@ -150,13 +150,5 @@ if not df.empty:
     fig_regional.update_layout(**PLOTLY_LAYOUT)
     st.plotly_chart(fig_regional, use_container_width=True)
 
-    st.markdown("---")
-
-    proposta_box("""
-    <strong>1. Campanhas de Parcelamento Sem Juros:</strong> Para categorias de alto valor (Eletrônicos, Relógios), subsídio de juros via taxa de seller. O uplift de 3x no ticket cobre facilmente o custo.<br><br>
-    <strong>2. Incentivo ao Cartão de Crédito via Cashback:</strong> Boleto é o meio dominante, mas não favorece parcelamento. Programas de cashback em cartão crédito direcionam para parcelamentos maiores.<br><br>
-    <strong>3. Estratégia de Q4 (Blindagem Logística + Push de GMV):</strong> Black Friday + pré-Natal com infraestrutura logística reforçada desde outubro, garantindo NPS positivo no pico de receita.
-    """)
-
 else:
     st.warning("Dados não carregados.")
