@@ -125,6 +125,39 @@ if not df.empty:
     )
     st.plotly_chart(fig_log, use_container_width=True)
 
-    proposta_box("1. <strong>SLA de Postagem</strong>: Penalizar vendedores que ultrapassam 2 dias para postar após aprovação. 2. <strong>Hubs Regionais</strong>: Reduzir distância percorrida pelas transportadoras no Norte/Nordeste. 3. <strong>Modelo Preditivo de Atraso</strong>: Avisar clientes proativamente, reduzindo o impacto no NPS.")
+    st.markdown("### 📦 Impacto das Dimensões no Custo de Frete")
+    
+    col_dims = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm', 'freight_value']
+    if all(col in df_del.columns for col in col_dims):
+        # Criando coluna de volume (cm³)
+        df_del['volume_cm3'] = df_del['product_length_cm'] * df_del['product_height_cm'] * df_del['product_width_cm']
+        
+        # Pegando uma amostra para o scatter plot não ficar muito pesado no Streamlit
+        df_sample = df_del.dropna(subset=['volume_cm3', 'freight_value']).sample(n=min(5000, len(df_del)), random_state=42)
+        
+        fig_vol = px.scatter(
+            df_sample, x='volume_cm3', y='freight_value', 
+            trendline='ols',
+            opacity=0.5,
+            color_discrete_sequence=['#6c63ff'],
+            labels={'volume_cm3': 'Volume do Pacote (cm³)', 'freight_value': 'Valor do Frete (R$)'},
+            title="Correlação: Volume Cúbico vs Custo de Transporte"
+        )
+        fig_vol.update_layout(**PLOTLY_LAYOUT)
+        st.plotly_chart(fig_vol, use_container_width=True)
+    else:
+        st.info("💡 Colunas de dimensões do produto não encontradas no dataset para gerar o cruzamento com frete.")
+
+    st.markdown("---")
+    st.markdown("### 🎯 Proposta de Valor Final")
+    
+    # Nova proposta de valor contemplando os insights do notebook
+    proposta_box("""
+    Transformar a logística de um passivo operacional para um motor de lealdade exige ações preditivas:<br><br>
+    1. <strong>Detector de Anomalias em Trânsito (SAC Proativo):</strong> Implementar monitoramento nos logs de rastreio para identificar pacotes retidos em hubs lentos. O sistema deve acionar o SAC para notificar o cliente <em>antes</em> dele reclamar, mitigando avaliações negativas.<br><br>
+    2. <strong>SLA Rígido de Postagem:</strong> Vendedores representam a primeira metade do gargalo. É preciso gamificar ou penalizar quem excede 2 dias para despacho.<br><br>
+    3. <strong>Otimização Volumétrica:</strong> O frete é penalizado pelo volume. Incentivar a compra de cestas mais densas e menores dilui o custo e protege a margem no Last-Mile.
+""")
+    
 else:
     st.warning("Dados não disponíveis.")

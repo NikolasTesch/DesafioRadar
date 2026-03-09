@@ -83,6 +83,10 @@ if not df.empty:
     fig_freight.update_layout(**PLOTLY_LAYOUT)
     st.plotly_chart(fig_freight, use_container_width=True)
 
-    proposta_box("1. <strong>Frete Grátis Estratégico</strong>: Subsidiar o frete em categorias críticas (móveis, eletro) para reverter o impacto no NPS. 2. <strong>Programa de Proteção de Itens Frágeis</strong>: Embalagem reforçada como diferencial de categoria. 3. <strong>SLA de Qualidade</strong>: Estipular taxa máxima de avaliações 1-2 por seller como critério de permanência na plataforma.")
+    proposta_box("""
+    1. <strong>Frete Grátis Estratégico</strong>: Subsidiar o frete em categorias críticas (móveis, eletro) para reverter o impacto no NPS. <br><br>
+    2. <strong>Programa de Proteção de Itens Frágeis</strong>: Embalagem reforçada como diferencial de categoria. <br><br>
+    3. <strong>SLA de Qualidade</strong>: Estipular taxa máxima de avaliações 1-2 por seller como critério de permanência na plataforma.
+""")
 else:
     st.warning("Dados não carregados.")

@@ -93,6 +93,10 @@ if not df.empty:
         )
     st.plotly_chart(fig_month, use_container_width=True)
 
-    proposta_box("1. <strong>Campanhas Programadas</strong>: Investir em Ads entre 9h–15h nos dias úteis para maximizar ROAS. 2. <strong>Preparação Logística Antecipada</strong>: Ampliar estoque de transportadoras a partir de outubro para absorver o pico de final de ano. 3. <strong>Calendário Comercial</strong>: Criar calendário de eventos sazonais (Dia das Mães, Dia dos Pais, BF, Natal) como base para planejamento de SKUs e campanhas.")
+    proposta_box("""
+    1. <strong>Alocação Dinâmica de Mídia</strong>: Escalar o investimento em Ads além da janela 9h-15h e antecipar o 'pre-heat' de grandes datas, garantindo ROAS positivo antes da inflação dos leilões em novembro. <br><br>
+    2. <strong>Blindagem Logística Preventiva</strong>: Expandir a malha e renegociar SLAs em outubro para mitigar o 'Peso do Atraso' — protegendo o NPS e a nota média de avaliação durante o pico de demanda. <br><br>
+    3. <strong>Inteligência de Mix Regional</strong>: Utilizar o histórico geográfico para otimizar o estoque de categorias de alta rotatividade (como Esporte & Lazer), garantindo que o produto certo esteja no CD mais próximo antes das férias e feriados.
+""")
 else:
     st.warning("Dados não carregados.")
