@@ -1,105 +1,87 @@
 import streamlit as st
 import sys, os
+import base64 # Added for base64 encoding of images
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from style_utils import inject_global_css, render_sidebar_logo, page_header
 
 st.set_page_config(
-    page_title="Olist - O peso do Atraso",
+    page_title="Olist - Agradecimentos",
     page_icon=os.path.join(os.path.dirname(__file__), "..", "public", "Radar.svg"),
     layout="wide"
 )
 inject_global_css()
 render_sidebar_logo()
 
-page_header("🙏 Agradecimentos", "Com gratidão por cada pessoa e recurso que tornaram isso possível")
+page_header("🙏 Agradecimentos", "Reconhecimento aos parceiros e recursos do projeto")
 
 # ── MENSAGEM PRINCIPAL ────────────────────────────────────────────────────────
 st.markdown("""
-<div style="max-width: 800px; text-align: center; margin: 1.5rem auto 2rem auto;">
-    <p style="font-family:'DM Sans',sans-serif; font-size:1.05rem; color:#c0c0c0; line-height:1.9;">
-        Este projeto é fruto da dedicação coletiva de uma equipe diversa, unida pela curiosidade sobre os dados
-        e pelo desejo de transformar informação em impacto real. Cada análise, gráfico e proposta presente
-        neste dashboard só foi possível graças ao apoio de pessoas e organizações excepcionais.
+<div style="max-width: 800px; text-align: center; margin: 0.5rem auto 1.5rem auto;">
+    <p style="font-family:'DM Sans',sans-serif; font-size:1rem; color:#c0c0c0; line-height:1.6;">
+        Este trabalho é o resultado de uma jornada de aprendizado intensivo e colaboração. 
+        Agradecemos imensamente às organizações que viabilizaram este desenvolvimento.
     </p>
 </div>
 """, unsafe_allow_html=True)
 
-# ── AGRADECIMENTOS ────────────────────────────────────────────────────────────
-thanks = [
-    ("🎓", "Alpha Edtech", "Agradecemos à Alpha Edtech pela oportunidade ímpar de desenvolvimento profissional e aprendizado intensivo. A estrutura do programa, a qualidade dos mentores e o ambiente colaborativo foram fundamentais para que cada membro da equipe avançasse de forma significativa nas suas habilidades de análise de dados e desenvolvimento de software."),
-    ("🤝", "Cummins", "Um agradecimento especial à Cummins, parceira e patrocinadora oficial da nossa jornada. O suporte institucional e o compromisso com o desenvolvimento de talentos em tecnologia e dados refletem os valores de inovação e impacto que buscamos em cada linha de código."),
-]
+# Helper function to get base64 image
+def get_image_base64(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode('utf-8')
+    return "" # Return empty string if file not found
 
-for icon, title, text in thanks:
+# ── AGRADECIMENTOS EM COLUNAS ──────────────────────────────────────────────────
+col_alpha, col_cummins = st.columns(2, gap="large")
+
+with col_alpha:
+    logo_alpha_path = os.path.join(os.path.dirname(__file__), "..", "..", "public", "logo_alpha.png")
+    logo_alpha_base64 = get_image_base64(logo_alpha_path)
     st.markdown(f"""
-    <div style="
-        background: rgba(13,12,104,0.45);
-        border: 1px solid rgba(108,99,255,0.25);
-        border-radius: 16px;
-        padding: 1.5rem 1.8rem;
-        margin-bottom: 1.2rem;
-        display: flex;
-        gap: 1.5rem;
-        align-items: flex-start;
-        max-width: 900px;
-    ">
-        <div style="font-size:2.5rem; flex-shrink:0;">{icon}</div>
-        <div>
-            <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:1.05rem; color:#d9d9d9; margin-bottom:0.5rem;">{title}</div>
-            <div style="font-family:'DM Sans',sans-serif; font-size:0.9rem; color:#bbb; line-height:1.8;">{text}</div>
-        </div>
+    <div style="background: rgba(13,12,104,0.45); border: 1px solid rgba(108,99,255,0.25); border-radius: 16px; padding: 1.5rem; height: 320px; text-align: center;">
+        <img src="data:image/png;base64,{logo_alpha_base64}" style="margin-bottom: 1rem; border-radius: 8px; width: 120px;">
+        <h3 style="color:#d9d9d9; font-family:'Poppins', sans-serif; font-size: 1.1rem; margin-top: 10px;">Alpha Edtech</h3>
+        <p style="color:#aaa; font-family:'DM Sans', sans-serif; font-size: 0.88rem; line-height: 1.6;">
+            Pela oportunidade de formação intensiva, mentoria de excelência e por fomentar um ambiente de inovação e aprendizado prático em dados.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_cummins:
+    logo_cummins_path = os.path.join(os.path.dirname(__file__), "..", "..", "public", "logo_cummins.png")
+    logo_cummins_base64 = get_image_base64(logo_cummins_path)
+    st.markdown(f"""
+    <div style="background: rgba(13,12,104,0.45); border: 1px solid rgba(108,99,255,0.25); border-radius: 16px; padding: 1.5rem; height: 320px; text-align: center;">
+        <img src="data:image/png;base64,{logo_cummins_base64}" style="margin-bottom: 1rem; border-radius: 8px; width: 120px;">
+        <h3 style="color:#d9d9d9; font-family:'Poppins', sans-serif; font-size: 1.1rem; margin-top: 10px;">Cummins</h3>
+        <p style="color:#aaa; font-family:'DM Sans', sans-serif; font-size: 0.88rem; line-height: 1.6;">
+            Pelo patrocínio estratégico e compromisso com o desenvolvimento de talentos tech, impulsionando a cultura de dados na prática.
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# ── FONTES E RECURSOS ─────────────────────────────────────────────────────────
-st.markdown("### 📚 Fontes e Recursos Utilizados")
+# ── FONTES E RECURSOS (RESUMIDO) ──────────────────────────────────────────────
+st.markdown("### 📚 Fontes e Ferramentas")
 
-sources = [
-    ("📦", "[Kaggle Dataset — Olist Brazilian E-Commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)", "Dataset principal com +100k pedidos, 7 tabelas inter-relacionadas cobrindo 2016–2018."),
-    ("🗺️", "IBGE — Dados Geoespaciais do Brasil", "Utilizado como referência para análise regional e validação de estados e municípios brasileiros."),
-    ("📊", "Streamlit Documentation", "Framework utilizado para construção do dashboard interativo e multi-página."),
-    ("📈", "Plotly Python Library", "Biblioteca responsável por todas as visualizações interativas com suporte a tooltips e zoom."),
-    ("🐼", "Pandas & NumPy", "Pilares do processamento, limpeza e transformação dos dados ao longo de todo o pipeline analítico."),
-    ("🤖", "Scikit-learn & Statsmodels", "Utilizados para modelagem estatística, clustering K-Means e regressões OLS nos notebooks de experimentação."),
-]
+col_src1, col_src2 = st.columns(2)
 
-for icon, name, desc in sources:
-    st.markdown(f"""
-    <div style="
-        display: flex; gap: 1rem; align-items: flex-start;
-        padding: 0.7rem 0;
-        border-bottom: 1px solid rgba(108,99,255,0.12);
-    ">
-        <span style="font-size: 1.2rem; flex-shrink:0;">{icon}</span>
-        <div>
-            <div style="font-family:'DM Sans',sans-serif; font-size:0.9rem; color:#d9d9d9;">{name}</div>
-            <div style="font-family:'DM Sans',sans-serif; font-size:0.8rem; color:#888; margin-top:0.15rem;">{desc}</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+with col_src1:
+    st.markdown("🎯 **[Kaggle Dataset — Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)** (+100k pedidos)")
+    st.markdown("🗺️ **IBGE** (Dados Geoespaciais)")
+
+with col_src2:
+    st.markdown("📊 **Streamlit & Plotly** (Interface e Visuais)")
+    st.markdown("🐼 **Pandas & NumPy** (Pipeline de Dados)")
 
 st.markdown("---")
 
-# ── MENSAGEM INSPIRADORA ───────────────────────────────────────────────────────
+# ── MENSAGEM FINAL ────────────────────────────────────────────────────────────
 st.markdown("""
-<div style="
-    text-align: center;
-    padding: 2.5rem 1rem 1rem 1rem;
-    max-width: 750px;
-    margin: 0 auto;
-">
-    <p style="
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        background: linear-gradient(90deg, #6c63ff, #a89bff, #00c882);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    ">
+<div style="text-align: center; padding: 1rem;">
+    <p style="font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 700; background: linear-gradient(90deg, #6c63ff, #00c882); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
         "Os dados não mentem. Mas precisam de alguém disposto a ouvi-los."
     </p>
     <p style="font-family:'DM Sans',sans-serif; font-size:0.95rem; color:#888; line-height:1.7;">
@@ -113,11 +95,3 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-# Final impact summary
-st.markdown("---")
-st.markdown("### 🎯 Impacto deste Dashboard")
-col_res1, col_res2, col_res3 = st.columns(3)
-col_res1.metric("Análises Acionáveis", "10+", "Soluções reais")
-col_res2.metric("Datasets Integrados", "7", "Visão 360°")
-col_res3.metric("Foco do Business", "ROI & NPS", "Estratégia")

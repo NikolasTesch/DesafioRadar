@@ -24,7 +24,7 @@ with col_a:
     ---
     ### 🏢 Sobre a Olist
     A **Olist** é um marketplace que conecta pequenos comerciantes a grandes plataformas de vendas (como
-    Mercado Livre, B2W e Americanas). Ela opera como intermediária logística e de pagamentos,
+    Mercado Livre e Americanas). Ela opera como intermediária logística e de pagamentos,
     sendo responsável pelos dados que analisamos aqui.
     """)
 
@@ -96,7 +96,7 @@ for i, (icon, title, desc) in enumerate(questions):
     with q_cols[i % 3]:
         st.markdown(
             f"""
-        <div style="border:1px solid rgba(108,99,255,0.2); border-radius:10px; padding:1rem; margin-bottom:0.8rem; background:rgba(108,99,255,0.05);">
+        <div style="border:1px solid rgba(108,99,255,0.2); border-radius:10px; padding:1rem; margin-bottom:0.8rem; background:rgba(108,99,255,0.05); text-align: center;">
             <div style="font-size:1.5rem;">{icon}</div>
             <div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:1.1rem; color:#a89bff;">{title}</div>
             <div style="font-family:'DM Sans',sans-serif; font-size:0.85rem; color:#bbb; margin-top:0.3rem;">{desc}</div>
