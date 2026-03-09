@@ -10,7 +10,7 @@ st.set_page_config(page_title="Olist - O peso do Atraso", page_icon=os.path.join
 inject_global_css()
 render_sidebar_logo()
 
-page_header("💰 Financeiro e Análise de Pagamentos", "GMV, ticket médio y comportamento de compra")
+page_header("💰 Financeiro e Análise de Pagamentos", "GMV, ticket médio e comportamento de compra")
 
 problema_box("O faturamento total bruto mascara uma realidade complexa: outliers inflam o ticket médio, compras parceladas têm comportamento radicalmente distinto das à vista, e categorias de alto valor são sub-exploradas do ponto de vista de incentivos de parcelamento.")
 
@@ -127,6 +127,10 @@ if not df.empty:
     )
     st.plotly_chart(fig_tl, use_container_width=True)
 
-    proposta_box("1. <strong>Campanhas de Parcelamento Sem Juros</strong> para categorias de alto valor (Eletrônicos, Relógios). 2. <strong>Incentivo ao Cartão de Crédito</strong> via cashback — hoje sub-representado vs boleto. 3. <strong>Estratégia de Q4</strong>: Black Friday + pré-Natal como janela principal de push de volume, com infraestrutura logística reforçada.")
+    proposta_box("""
+    1. <strong>Campanhas de Parcelamento Sem Juros</strong> para categorias de alto valor (Eletrônicos, Relógios). <br><br>
+    2. <strong>Incentivo ao Cartão de Crédito</strong> via cashback — hoje sub-representado vs boleto. <br><br>
+    3. <strong>Estratégia de Q4</strong>: Black Friday + pré-Natal como janela principal de push de volume, com infraestrutura logística reforçada.
+""")
 else:
     st.warning("Dados não carregados.")

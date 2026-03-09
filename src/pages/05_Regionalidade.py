@@ -84,6 +84,69 @@ if not df.empty:
     top_states.columns = ['Estado', 'Frete Médio (R$)', 'Prazo Médio (Dias)', 'Volume de Pedidos']
     st.dataframe(top_states.reset_index(drop=True), use_container_width=True, hide_index=True)
 
-    proposta_box("Implementar <strong>Hubs de Distribuição Regionais</strong> em Recife (PE) e Manaus (AM) reduziria o custo e prazo logístico para Norte e Nordeste em até 40%, desbloqueando um mercado potencial de milhões de consumidores mal atendidos.")
+
+    st.markdown("---")
+    st.markdown("### 📦 Consumo Específico Regional")
+    st.write("Identificando a categoria de produto com maior volume de pedidos para cada Unidade Federativa.")
+
+    # Verificando se a coluna de categoria existe no df_clean
+    if 'product_category_name' in df_clean.columns:
+        # Calculando a categoria top 1 por estado
+        top_categorias = df_clean.groupby(['customer_state', 'product_category_name']).size().reset_index(name='total_pedidos')
+        top_categorias = top_categorias.sort_values(['customer_state', 'total_pedidos'], ascending=[True, False])
+        top_1_categoria_estado = top_categorias.drop_duplicates(subset=['customer_state'], keep='first')
+        
+        # Formatando as colunas para exibição
+        top_1_categoria_estado.columns = ['Estado', 'Categoria Mais Vendida', 'Total de Pedidos']
+        
+        # Gráfico de barras horizontais
+        fig_cat = px.bar(
+            top_1_categoria_estado.sort_values('Total de Pedidos', ascending=True),
+            x='Total de Pedidos',
+            y='Estado',
+            color='Categoria Mais Vendida',
+            orientation='h',
+            title="Produto Carro-Chefe por Estado",
+            color_discrete_sequence=ACCENT_COLORS
+        )
+        fig_cat.update_layout(**PLOTLY_LAYOUT, height=600)
+        st.plotly_chart(fig_cat, use_container_width=True)
+        
+        with st.expander("Ver Tabela Completa de Categorias por Estado"):
+            st.dataframe(top_1_categoria_estado.reset_index(drop=True), use_container_width=True)
+    else:
+        st.warning("⚠️ A coluna 'product_category_name' não foi encontrada no dataset para gerar a visão de consumo específico.")
+
+    st.markdown("---")
+    st.markdown("### 💡 Soluções Estratégicas para Gaps Regionais")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        insight_box("Recomendação de Cross-Selling por CEP")
+        st.markdown("""
+        **O Problema:** Esvaziamento no volume da cesta em compras nas regiões Norte e Nordeste devido ao alto impacto percentual do frete.
+        
+        **A Solução Operacional:** Implementar um **sistema de recomendação filtrada por cubagem**. A plataforma deve sugerir aos clientes destas regiões produtos adicionais que sejam leves, mas de alta densidade de preço (ex: *Beleza e Saúde*, *Relógios*). Esses itens se encaixam na mesma faixa volumétrica do pacote principal, diluindo a barreira logística sem aumentar o custo de envio.
+        """)
+
+    with col2:
+        insight_box("Otimização de Mix para CD Avançado")
+        st.markdown("""
+        **O Problema:** Indisponibilidade regional e SLAs de entrega longos para produtos fora do eixo Sul-Sudeste.
+        
+        **A Solução Analítica:** Utilizar clusterização (*K-Means multivariado*) cruzando a **Demanda Latente** (carrinhos abandonados por alto custo de frete) com a **Malha Logística Rápida**. Essa modelagem fornece embasamento para a abertura de um Centro de Distribuição fora de São Paulo focado estritamente nas categorias carro-chefe daquela região.
+        """)
+
+    st.markdown("---")
+    st.markdown("### 🎯 Proposta de Valor Final")
+    
+    # Proposta de valor atualizada englobando logística, cross-selling e estoque inteligente
+    proposta_box(
+        "A continentalidade do Brasil exige que a logística deixe de ser apenas um centro de custo para se tornar uma alavanca de conversão. "
+        "A verdadeira vantagem competitiva está em tratar as distâncias geográficas com inteligência de dados: "
+        "**diluir o peso do frete** através de cross-selling volumétrico focado em produtos leves e de alto valor, e **descentralizar estoques** de forma cirúrgica, baseando-se na demanda latente e nas categorias de pico específicas de cada estado."
+    )
+
 else:
-    st.warning("Dados não carregados.")
+    st.warning("Dados não disponíveis.")
