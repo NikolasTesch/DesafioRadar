@@ -96,19 +96,21 @@ def inject_global_css():
         /* === TÍTULO DE PÁGINA (h1) === */
         .page-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
+            font-size: 4.2rem;
             font-weight: 800;
             background: linear-gradient(90deg, #6c63ff, #a89bff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0rem;
+            line-height: 1.1;
         }
         .page-subtitle {
             font-family: 'DM Sans', sans-serif;
             color: #aaa;
             font-size: 1rem;
-            margin-top: 0;
+            margin-top: -0.5rem;
             margin-bottom: 2rem;
+            opacity: 0.8;
         }
 
         /* === SEÇÃO DE INSIGHT/PROPOSTA === */
@@ -194,7 +196,7 @@ def render_sidebar_logo():
 
 def page_header(title: str, subtitle: str = ""):
     """Renderiza cabeçalho padronizado de página."""
-    st.markdown(f'<p class="page-title">{title}</p>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="page-title" style="font-size: 4.5rem !important;">{title}</h1>', unsafe_allow_html=True)
     if subtitle:
         st.markdown(f'<p class="page-subtitle">{subtitle}</p>', unsafe_allow_html=True)
     st.markdown("---")
