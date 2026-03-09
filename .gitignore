@@ -14,6 +14,7 @@ coverage.xml
 venv/
 env/
 não enviar/
+
 # Jupyter
 .ipynb_checkpoints/
 
@@ -33,5 +34,6 @@ data/profile-summary.json
 data/raw/workflow-demo.csv
 documentation/workflow-demo-report.md
 data/processed/*.html
+notebooks/results
 data/processed/*.csv
 notebooks/results

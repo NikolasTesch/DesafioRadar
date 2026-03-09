@@ -126,8 +126,58 @@ if not df_sim.empty:
         )
         st.caption(f"Taxa de atraso atual: {delay_rate_actual*100:.2f}% | Pedidos salvos: {pedidos_salvos:,.0f}")
 
+    st.markdown("---")
+    st.markdown("### ⚖️ Concentração de Mercado: Princípio de Pareto")
+    
+    col_par1, col_par2 = st.columns([1, 2])
+    
+    df_seller = get_analytical_df()
+    if not df_seller.empty:
+        receita_vendedores = df_seller.groupby('seller_id')['receita_liquida'].sum().sort_values(ascending=False)
+        top_20_count = max(1, int(len(receita_vendedores) * 0.2))
+        receita_top_20 = receita_vendedores.head(top_20_count).sum()
+        receita_total = receita_vendedores.sum()
+        percent_receita = (receita_top_20 / receita_total) * 100
+        
+        with col_par1:
+            st.metric("Dominância Top 20%", f"{percent_receita:.1f}%", help="Percentual da receita total gerada pelos 20% maiores vendedores.")
+            st.caption(f"Dos {len(receita_vendedores)} vendedores, apenas {top_20_count} sustentam o marketplace.")
+            
+        with col_par2:
+            st.markdown(f"""
+            <div style="background: rgba(0,200,130,0.1); border: 1px solid rgba(0,200,130,0.3); border-radius: 12px; padding: 1rem;">
+                <strong>Insight de Risco:</strong> A operação é altamente dependente de uma elite de vendedores. 
+                Uma falha sistêmica ou saída desses parceiros impactaria <strong>{percent_receita:.1f}%</strong> do faturamento imediato.
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("### 🏆 Performance dos Top 50 Vendedores")
+    st.markdown("Volume de vendas vs. Satisfação do Cliente (Nota Média)")
+    
+    if not df_seller.empty:
+        seller_stats = df_seller.groupby('seller_id').agg(
+            volume=('order_id', 'nunique'),
+            score=('review_score', 'mean'),
+            receita=('receita_liquida', 'sum')
+        ).reset_index()
+        
+        top_50 = seller_stats.sort_values('volume', ascending=False).head(50)
+        
+        from style_utils import PLOTLY_LAYOUT
+        import plotly.express as px
+        fig_sell = px.scatter(
+            top_50, x="volume", y="score", size="receita",
+            hover_name="seller_id",
+            labels={'volume': 'Volume de Vendas', 'score': 'Nota Média'},
+            color_discrete_sequence=['#a89bff']
+        )
+        fig_sell.update_layout(**PLOTLY_LAYOUT)
+        fig_sell.add_hline(y=4.0, line_dash="dash", line_color="#ff5050", annotation_text="Meta de Qualidade")
+        st.plotly_chart(fig_sell, use_container_width=True)
+
 st.markdown("---")
-st.markdown("### 👥 Equipe Desafio Radar")
+st.markdown("### 👥 Equipe do Projeto")
 members = [
     ("Davi", "Análise Estratégica e Sazonalidade", "📅"),
     ("Edvan", "Regionalidade e Qualidade de Dados", "🌎"),
