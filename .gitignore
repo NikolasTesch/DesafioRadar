@@ -23,6 +23,8 @@ não enviar/
 Thumbs.db
 .vscode/
 .idea/
+.agent/
+documentation/
 
 # Build / logs
 dist/
@@ -33,7 +35,6 @@ build/
 data/profile-summary.json
 data/raw/workflow-demo.csv
 documentation/workflow-demo-report.md
-data/processed/*.html
 notebooks/results
-data/processed/*.csv
+data/processed/
 notebooks/results
